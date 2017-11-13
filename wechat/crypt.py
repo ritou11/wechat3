@@ -1,4 +1,4 @@
-#encoding=utf-8
+# encoding=utf-8
 
 import base64
 import string
@@ -8,10 +8,8 @@ import time
 import struct
 from Crypto.Cipher import AES
 import xml.etree.cElementTree as ET
-import sys
 import socket
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 
 WXBizMsgCrypt_OK = 0
 WXBizMsgCrypt_ValidateSignature_Error = -40001
@@ -101,7 +99,7 @@ class XMLParse:
             'msg_signaturet': signature,
             'timestamp': timestamp,
             'nonce': nonce,
-            }
+        }
         resp_xml = self.AES_TEXT_RESPONSE_TEMPLATE % resp_dict
         return resp_xml
 
@@ -139,7 +137,7 @@ class Prpcrypt(object):
     """提供接收和推送给公众平台消息的加解密接口"""
 
     def __init__(self, key):
-        #self.key = base64.b64decode(key+"=")
+        # self.key = base64.b64decode(key+"=")
         self.key = key
         # 设置加解密模式为AES的CBC模式
         self.mode = AES.MODE_CBC
@@ -178,13 +176,13 @@ class Prpcrypt(object):
         try:
             pad = ord(plain_text[-1])
             # 去掉补位字符串
-            #pkcs7 = PKCS7Encoder()
-            #plain_text = pkcs7.encode(plain_text)
+            # pkcs7 = PKCS7Encoder()
+            # plain_text = pkcs7.encode(plain_text)
             # 去除16位随机字符串
             content = plain_text[16:-pad]
             xml_len = socket.ntohl(struct.unpack("I", content[:4])[0])
-            xml_content = content[4:xml_len+4]
-            from_appid = content[xml_len+4:]
+            xml_content = content[4:xml_len + 4]
+            from_appid = content[xml_len + 4:]
         except Exception:
             return WXBizMsgCrypt_IllegalBuffer, None
         if from_appid != appid:
@@ -203,12 +201,12 @@ class Prpcrypt(object):
 class WXBizMsgCrypt(object):
     def __init__(self, sToken, sEncodingAESKey, sCorpId):
         try:
-            self.key = base64.b64decode(sEncodingAESKey+"=")
+            self.key = base64.b64decode(sEncodingAESKey + "=")
             assert len(self.key) == 32
         except:
             throw_exception("[error]: EncodingAESKey unvalid !",
                             FormatException)
-           #return WXBizMsgCrypt_IllegalAesKey)
+            # return WXBizMsgCrypt_IllegalAesKey)
         self.m_sToken = sToken
         self.m_sCorpid = sCorpId
 

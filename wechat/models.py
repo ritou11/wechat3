@@ -1,4 +1,4 @@
-#encoding=utf-8
+# encoding=utf-8
 
 from xml.dom import minidom
 import collections
@@ -7,7 +7,7 @@ import time
 
 def kv2element(key, value, doc):
     ele = doc.createElement(key)
-    if isinstance(value, str) or isinstance(value, unicode):
+    if isinstance(value, str):
         data = doc.createCDATASection(value)
         ele.appendChild(data)
     else:
@@ -47,7 +47,7 @@ class WxRequest(object):
 class WxResponse(object):
 
     def __init__(self, request):
-        self.CreateTime = long(time.time())
+        self.CreateTime = int(time.time())
         self.ToUserName = request.FromUserName
         self.FromUserName = request.ToUserName
         self.Extra = {}

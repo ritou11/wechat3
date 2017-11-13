@@ -36,7 +36,8 @@ class WxApplication(object):
 
         sign_ele = [self.token, timestamp, nonce]
         sign_ele.sort()
-        if(signature == sha1(''.join(sign_ele)).hexdigest()):
+        if(signature == sha1(''.join(sign_ele)
+                             .encode(encoding='utf-8')).hexdigest()):
             return True, echostr
         else:
             return None
@@ -266,7 +267,7 @@ class WxBaseApi(object):
         os.remove(tmp_path)
         return self._process_response(rsp)
 
-    def download_media(self,  media_id, to_path, url='media/get'):
+    def download_media(self, media_id, to_path, url='media/get'):
         rsp = requests.get(self.api_entry + url,
                            params={'media_id': media_id,
                                    'access_token': self.access_token},
@@ -412,12 +413,12 @@ class WxApi(WxBaseApi):
 
     def create_tag(self, name):
         return self._post('tags/create',
-                          {'tag': {"name":name}})
+                          {'tag': {"name": name}})
 
     def tags(self):
         return self._get('tags/get')
 
-    def update_tag(self, tag_id,name):
+    def update_tag(self, tag_id, name):
         return self._post('tags/update',
                           {'tag': {'id': tag_id, 'name': name}})
 
@@ -432,7 +433,7 @@ class WxApi(WxBaseApi):
         return self._post('tags/members/batchtagging',
                           {'openid_list': users_list, 'tagid': tag_id})
 
-    def batch_untagging(self, tag_id,users_list):
+    def batch_untagging(self, tag_id, users_list):
         return self._post('tags/members/batchuntagging',
                           {'openid_list': users_list, 'tagid': tag_id})
 

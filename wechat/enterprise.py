@@ -1,4 +1,4 @@
-#encoding=utf-8
+# encoding=utf-8
 
 import requests
 import time
@@ -60,7 +60,7 @@ class WxApplication(BaseApplication):
         self.pre_process()
         rsp = func(self.req)
         self.post_process()
-        result = rsp.as_xml().encode('UTF-8') 
+        result = rsp.as_xml().encode('UTF-8')
 
         if not result:
             return ''
@@ -176,8 +176,7 @@ class WxApi(WxBaseApi):
             "tel": tel,
             "email": email,
             "weixinid": weixinid,
-            "extattr": extattr,
-            }
+            "extattr": extattr}
         return self._post('cgi-bin/user/create', params)
 
     def update_user(self, userid, name, department=None, position=None,
@@ -193,8 +192,7 @@ class WxApi(WxBaseApi):
             "tel": tel,
             "email": email,
             "weixinid": weixinid,
-            "extattr": extattr,
-            }
+            "extattr": extattr}
         return self._post('cgi-bin/user/update', params)
 
     def delete_user(self, userid):
