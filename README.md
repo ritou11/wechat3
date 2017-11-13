@@ -1,23 +1,25 @@
 # 微信公众号Python-SDK
 
-作者: [@jeff_kit](http://twitter.com/jeff_kit)
+维护者: @ritou11
 
-本SDK支持微信公众号以及企业号的上行消息及OAuth接口。本文档及SDK假设使用者已经具备微信公众号开发的基础知识，及有能力通过微信公众号、企业号的文档来查找相关的接口详情。
+原作者: [@jeff_kit](http://twitter.com/jeff_kit)
+
+本程序是jeff_kit的wechat包的python3版本。本SDK支持微信公众号以及企业号的上行消息及OAuth接口。本文档及SDK假设使用者已经具备微信公众号开发的基础知识，及有能力通过微信公众号、企业号的文档来查找相关的接口详情。
 
 
 ## 1. 安装
 
 ### pip
-	
-	pip install wechat
+
+	pip install wechat3
 
 ### 源码安装
 
-	git clone git@github.com:jeffkit/wechat.git
+	git clone git@github.com:ritou11/wechat3.git
 	cd wechat
 	python setup.py install
-	
-	
+
+
 ## 2. 用户上行消息处理框架
 
 对于微信用户在公众号内发送的上行消息，本sdk提供了一个微型处理框架，开发者只需继承wechat.official.WxApplication类, 实现各种消息对应的方法，然后把该类与自己熟悉的web框架结合起来使用即可。
@@ -48,7 +50,7 @@ process最后返回一串文本(xml或echoStr)。
 	app = YourApplication()
 	echo_str = app.process(query, xml=None)
 	# 返回echo_str给微信即可
-	
+
 
 #### 使用场景2：处理上行消息
 
@@ -71,16 +73,16 @@ process最后返回一串文本(xml或echoStr)。
 	
 	class WxApp(WxApplication):
 	
-    	SECRET_TOKEN = 'test_token'
+		SECRET_TOKEN = 'test_token'
 	    WECHAT_APPID = 'wx1234556'
 	    WECHAT_APPSECRET = 'sevcs0j'
-
-    	def on_text(self, text):
-        	return WxTextResponse(text.Content, text)
-        
-    	
-需要配置几个类参数，几个参数均可在公众号管理后台的开发者相关页面找到，前三个参数如果不配置，则需要在调用process方法时传入。
 	
+		def on_text(self, text):
+	    	return WxTextResponse(text.Content, text)
+
+
+需要配置几个类参数，几个参数均可在公众号管理后台的开发者相关页面找到，前三个参数如果不配置，则需要在调用process方法时传入。
+​	
 - SECRET_TOKEN: 微信公众号回调的TOKEN
 - APP_ID: 微信公众号的应用ID
 - ENCODING_AES_KEY: (可选)，加密用的SECRET，如您的公众号未采取加密传输，不需填。
@@ -139,19 +141,19 @@ on_xxx函数需要返回一个WxResponse的子类实例。WxResponse的子类及
 ##### WxTextResponse, 文本消息
 
  	WxTextResponse("hello", req)
-	
+​	
 ##### WxImageResponse, 图片消息
 
 	WxImageResponse(WxImage(MediaId='xxyy'),req)
-	
+
 ##### WxVoiceResponse, 语音消息
 
 	WxVoiceResponse(WxVoice(MediaId='xxyy'),req)
-	
+
 ##### WxVideoResponse, 视频消息
 
 	WxVideoResponse(WxVideo(MediaId='xxyy', Title='video', Description='test'),req)
-	
+
 ##### WxMusicResponse, 音乐消息
 
 	WxMusicResponse(WxMusic(Title='hey jude', 
@@ -166,14 +168,14 @@ on_xxx函数需要返回一个WxResponse的子类实例。WxResponse的子类及
 		Picurl='http://smpic.com/pic.jpg', 
 		Url='http://github.com/jeffkit'), req)
 ##### WxEmptyResponse, 无响应
-	
+
 	WxEmptyResponse(req)
 
 ### 在Django中使用WxApplication
 
 
 下面以Django为例说明，实现一个微信回调的功能(view)，利用上面示例代码中的WxApp：
-	
+​	
 	from django.http import HttpResponse
 
 	def wechat(request):
@@ -182,9 +184,9 @@ on_xxx函数需要返回一个WxResponse的子类实例。WxResponse的子类及
 		return HttpResponse(result)
 
 配置 urls.py:
-	
+​	
 	urlpatterns = patterns('',
-    	url(r'^wechat/', 'myapp.views.wechat'),
+		url(r'^wechat/', 'myapp.views.wechat'),
 	)
 
 
@@ -217,10 +219,10 @@ OK.就这么多，WxApplication本身与web框架无关，不管你使用哪个F
 		result = app.process(request.GET, request.body, 
 			token='xxxx', app_id='xxxx', aes_key='xxxx')
 		return HttpResponse(result)
-	
-		
+
+
 嗯，可以自定义消息的handlers，而如果要针对事件自定义handlers的话，要修改app.event_handlers，数据的格式是一样的。具体的消息和事件类型的key，就直接看看源码得了。卡卡。
-	
+​	
 
 ## 3. OAuth API
 
